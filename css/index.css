@@ -1,0 +1,114 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+html {
+  background-color: #eaeaff;
+}
+
+.main {
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  align-items: center;
+}
+
+.ram {
+  display: inline-flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #000;
+  width: fit-content;
+  height: fit-content;
+}
+
+.ram > article {
+  background-color: #ddd;
+  border: 1px solid #000;
+  height: 40px;
+  width: 200px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+
+.ram > article > span {
+  color: white;
+  font: 1.2em Georgia, "Bitstream Charter", "URW Bookman L",
+    "Century Schoolbook L", serif;
+  font-weight: bold;
+}
+
+.proc {
+  width: 70%;
+  display: grid;
+  grid-template-columns: 1fr repeat(7, 2fr);
+  border: #000 1px solid;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.proc > article {
+  background-color: #c8c8c8;
+  border: 1px solid #000;
+  height: 55px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+
+.proc > article > span {
+  font: 1.03em Lucida Sans Unicode;
+}
+
+.icons{
+  height: 85vh;
+  width: fit-content;
+  display: inline-grid;
+  grid-template-rows: repeat(4, 1fr);
+  grid-auto-flow: column;
+}
+
+.icons>figure{
+  margin-left: .2rem;
+  margin-top: .4rem;
+  padding: 1rem 1rem 0 1rem;
+  border-radius: 6px;
+}
+
+.icons>figure>img{
+  height: 10vh;
+  width: auto;
+}
+
+.icons>figure>figcaption{
+  display: flex;
+  align-items: center;
+  width: 10vh;
+  height: 5vh;
+  font: 1.724vh Lucida Sans Unicode;
+  text-align: center;
+  color: white;
+  text-shadow: -1px 1px 1.5px black, 1px -1px 1.5px black, 0 0 5px black;
+}
+
+.icons>figure:hover{
+  border: #99f dotted 1px;
+  background-color: rgba(180, 230, 255, .5);
+}
+
+.figclick{
+  background-color: rgba(180, 230, 255, .8);
+  border: #55e dotted 1px;
+  border-radius: 6px;
+}
+
+.none {
+  display: none;
+}
