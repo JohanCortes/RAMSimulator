@@ -5,9 +5,10 @@ let $d = document,
       "#" + ("000000" + col.toString(16)).slice(-6),
       "#" + ("000000" + (16777215 - col).toString(16)).slice(-6),
     ];
-  };
+  },
+  $ram = $d.querySelector(".ram");
 
-segs = $d.querySelectorAll(".ram article");
+//segs = $d.querySelectorAll(".ram article");
 
 class Program {
   constructor(nombre, t_codigo, t_data, t_bss, logo) {
@@ -32,9 +33,9 @@ const kernel = 1048576,
   SO = new Program("S.O.", 431592, 207365, 916),
   Notepad = new Program(
     "Notepad",
-    18654,
-    10352,
-    164,
+    15654,
+    8352,
+    123,
     "https://icon-library.com/images/notepad-icon-png/notepad-icon-png-16.jpg"
   ),
   Word = new Program(
@@ -53,9 +54,9 @@ const kernel = 1048576,
   ),
   AutoCAD = new Program(
     "AutoCAD",
-    122883,
-    137842,
-    1055,
+    322883,
+    437842,
+    1655,
     "https://icon-library.com/images/autodesk-autocad.png"
   ),
   Calculadora = new Program(
@@ -74,58 +75,91 @@ const kernel = 1048576,
   ),
   GTA5 = new Program(
     "Grand Theft Auto V",
-    2359361,
-    532470,
-    8692,
+    2859361,
+    732470,
+    9892,
     "https://icon-library.com/images/grand-theft-auto-v-icon/grand-theft-auto-v-icon-20.jpg"
   ),
   Oracle = new Program(
     "Oracle",
-    576319,
-    614403,
-    2364,
+    776319,
+    814403,
+    2764,
     "https://icon-library.com/images/oracle-icon-png/oracle-icon-png-14.jpg"
   );
+
 let programas = [
-  SO,
-  Notepad,
-  Word,
-  Excel,
-  AutoCAD,
-  Calculadora,
-  Chrome,
-  GTA5,
-  Oracle,
-];
+    SO,
+    Notepad,
+    Word,
+    Excel,
+    AutoCAD,
+    Calculadora,
+    Chrome,
+    GTA5,
+    Oracle,
+  ],
+  p_en_ejecucion = [SO];
 for (let p of programas) {
   p.resize();
-  if (p.nombre!=="S.O.") {
-  fig = `<figure>
+  if (p.nombre !== "S.O.") {
+    fig = `<figure>
     <img src="${p.logo}" alt=" ">
     <figcaption><span>${p.nombre}</span></figcaption>
   </figure>`;
-  $d.querySelector(".icons").innerHTML += fig;
+    $d.querySelector(".icons").innerHTML += fig;
   }
 }
 
-programas.forEach((e, i) => {
-  col = randomColor();
-  segs[i].querySelector("span").textContent = e.nombre;
+let drawRam = () => {
+  $ram.innerHTML = "";
+  let libre = 16777215,
+    proc = $d.querySelector(".proc");
+  proc.innerHTML = `<article><span>Item</span></article>
+  <article><span>Nombre</span></article>
+  <article><span>Tamaño en disco</span></article>
+  <article><span>Tamaño codigo</span></article>
+  <article><span>Datos inicializados</span></article>
+  <article><span>Datos sin inicializar</span></article>
+  <article><span>Memoria inicial</span></article>
+  <article><span>Memoria inicial (KiB)</span></article>`;
+  p_en_ejecucion.forEach((e, i) => {
+    col = randomColor();
+    libre -= e.memoria;
+    //console.log(libre);
+    let $article = $d.createElement("article"),
+      $span = $d.createElement("span");
+    $span.textContent = e.nombre;
+    $article.appendChild($span);
+    $article.setAttribute(
+      "style",
+      `background: ${col[0]};text-shadow: -1.5px 2.5px 2px black, 1.5px -1.5px 0.08em ${col[1]}, 0 0 2em black;flex-grow: ${e.memoria}`
+    );
+    $ram.appendChild($article);
+    /*segs[i].querySelector("span").textContent = e.nombre;
   segs[i].setAttribute(
     "style",
     `background: ${col[0]};text-shadow: -1.5px 2.5px 2px black, 1.5px -1.5px 0.08em ${col[1]}, 0 0 2em black;`
-  );
-  let $articles = `<article><span>P${i}</span></article>`;
-  for (const key in e) {
-    if (key !== "logo") {
-      $articles += `<article><span>${e[key]}</span></article>`;
+  );*/
+    let $articles = `<article><span>P${i}</span></article>`;
+    for (const key in e) {
+      if (key !== "logo") {
+        $articles += `<article><span>${e[key]}</span></article>`;
+      }
     }
-  }
-  $articles += `<article><span>${
-    parseInt((e.memoria / 1024) * 100) / 100
-  }</span></article>`;
-  $d.querySelector(".proc").innerHTML += $articles;
-});
+
+    $articles += `<article><span>${
+      parseInt((e.memoria / 1024) * 100) / 100
+    }</span></article>`;
+    proc.innerHTML += $articles;
+  });
+
+  (() => {
+    let $article = $d.createElement("article");
+    $article.setAttribute("style", `flex-grow: ${libre}`);
+    $ram.appendChild($article);
+  })();
+};
 
 $d.querySelectorAll(".icons figure").forEach((e) => {
   e.addEventListener("click", (fig) => {
@@ -137,7 +171,35 @@ $d.querySelectorAll(".icons figure").forEach((e) => {
     $figure.classList.add("figclick");
   });
   e.addEventListener("dblclick", (fig) => {
-    console.log("double", fig.target);
+    let icons = Array(...$d.querySelector(".icons").children),
+      $figure = fig.target,
+      libre = $ram.querySelector("article:last-child").style.flexGrow;
+    console.log(libre);
+    while (!$figure.matches("figure")) $figure = $figure.parentNode;
+    let programa = programas[icons.indexOf($figure) + 1];
+    if (programa.memoria <= libre) {
+      p_en_ejecucion.push(programa);
+      drawRam();
+    } else {
+      alert("No hay memoria suficiente");
+    }
+    //console.log(programas[icons.indexOf($figure)], $figure);
   });
 });
+
+$ram.addEventListener("dblclick", (e) => {
+  let segs = Array(...$d.querySelector(".ram").children),
+    $article = e.target,
+    program = p_en_ejecucion.indexOf(p_en_ejecucion[segs.indexOf($article)]);
+  while (!$article.matches("article")) $article = $article.parentNode;
+  if (program) {
+    p_en_ejecucion.splice(program, 1);
+    drawRam();
+  }
+});
+
+$d.addEventListener("DOMContentLoaded", () => {
+  drawRam();
+});
+
 console.log(programas);
