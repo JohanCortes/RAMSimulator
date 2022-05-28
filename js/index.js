@@ -8,8 +8,6 @@ let $d = document,
   },
   $ram = $d.querySelector(".ram");
 
-//segs = $d.querySelectorAll(".ram article");
-
 class Program {
   constructor(nombre, t_codigo, t_data, t_bss, logo) {
     this.nombre = nombre;
@@ -126,7 +124,6 @@ let drawRam = () => {
   p_en_ejecucion.forEach((e, i) => {
     col = randomColor();
     libre -= e.memoria;
-    //console.log(libre);
     let $article = $d.createElement("article"),
       $span = $d.createElement("span");
     $span.textContent = e.nombre;
@@ -136,11 +133,6 @@ let drawRam = () => {
       `background: ${col[0]};text-shadow: -1.5px 2.5px 2px black, 1.5px -1.5px 0.08em ${col[1]}, 0 0 2em black;flex-grow: ${e.memoria}`
     );
     $ram.appendChild($article);
-    /*segs[i].querySelector("span").textContent = e.nombre;
-  segs[i].setAttribute(
-    "style",
-    `background: ${col[0]};text-shadow: -1.5px 2.5px 2px black, 1.5px -1.5px 0.08em ${col[1]}, 0 0 2em black;`
-  );*/
     let $articles = `<article><span>P${i}</span></article>`;
     for (const key in e) {
       if (key !== "logo") {
@@ -153,7 +145,6 @@ let drawRam = () => {
     }</span></article>`;
     proc.innerHTML += $articles;
   });
-
   (() => {
     let $article = $d.createElement("article");
     $article.setAttribute("style", `flex-grow: ${libre}`);
@@ -183,15 +174,14 @@ $d.querySelectorAll(".icons figure").forEach((e) => {
     } else {
       alert("No hay memoria suficiente");
     }
-    //console.log(programas[icons.indexOf($figure)], $figure);
   });
 });
 
 $ram.addEventListener("dblclick", (e) => {
   let segs = Array(...$d.querySelector(".ram").children),
-    $article = e.target,
-    program = p_en_ejecucion.indexOf(p_en_ejecucion[segs.indexOf($article)]);
+    $article = e.target;
   while (!$article.matches("article")) $article = $article.parentNode;
+  let program = p_en_ejecucion.indexOf(p_en_ejecucion[segs.indexOf($article)]);
   if (program) {
     p_en_ejecucion.splice(program, 1);
     drawRam();

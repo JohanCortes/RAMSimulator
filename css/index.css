@@ -24,13 +24,13 @@ html {
   justify-content: center;
   border: 1px solid #000;
   width: fit-content;
-  height: 640px;
+  height: 95vh;
 }
 
 .ram > article {
   background-color: #ddd;
   border: 1px solid #000;
-  width: 200px;
+  width: 250px;
   text-align: center;
   display: flex;
   align-items: center;
