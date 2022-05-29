@@ -44,9 +44,9 @@ html {
 }
 
 .proc {
-  width: 70%;
+  width: 85%;
   display: grid;
-  grid-template-columns: 1fr repeat(7, 2fr);
+  grid-template-columns: 1fr repeat(8, 2fr);
   border: #000 1px solid;
   margin-top: 2rem;
   margin-bottom: 2rem;
