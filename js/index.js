@@ -133,13 +133,12 @@ const kernel = 1048576,
             if (!e.nombre && e.memoria > disp) disp = e.memoria;
           });
           exe.forEach((e, i) => {
-            console.log(e.nombre, e.memoria, cap, disp);
             if (!e.nombre && e.memoria >= cap && e.memoria <= disp) {
               disp = e.memoria;
               index = i;
             }
           });
-          if (libre < disp) index = null;
+          if (libre < disp && libre >= cap) index = null;
           break;
         case 2: //peor caso
           exe.forEach((e, i) => {
@@ -266,7 +265,6 @@ let drawProc = () => {
           drawProc();
           drawRam();
           drawMem();
-          console.log(exe);
         } else {
           alert("No hay memoria suficiente");
         }
@@ -283,37 +281,38 @@ let drawProc = () => {
       let segs = Array(...$d.querySelector(".ram").children),
         $article = e.target;
       while (!$article.matches("article")) $article = $article.parentNode;
-      let index = exe.indexOf(exe[segs.indexOf($article)]),
+      let index = exe.indexOf(exe[segs.indexOf($article)]);
+      if (exe[index]) {
         memoria = exe[index].memoria;
-      if (index && exe[index].pid) {
-        if (com) {
-          exe.splice(index, 1);
-          exe.forEach((e, i) => {
-            if (i >= index)
-              e.dir_base = (parseInt(e.dir_base, 16) - memoria)
-                .toString(16)
-                .toUpperCase();
-          });
-        } else {
-          let none = new Program();
-          none.pid = "";
-          none.memoria = memoria;
-          none.dir_base = exe[index].dir_base;
-          index === exe.length - 1 ? exe.pop() : (exe[index] = none);
-          for (let x = 1; x < exe.length; x++) {
-            if (!exe[x - 1].nombre && !exe[x].nombre) {
-              console.log(exe[x - 1], exe[x]);
-              exe[x - 1].memoria += exe[x].memoria;
-              exe.splice(x, 1);
-              x--;
+        if (index && exe[index].pid) {
+          if (com) {
+            exe.splice(index, 1);
+            exe.forEach((e, i) => {
+              if (i >= index)
+                e.dir_base = (parseInt(e.dir_base, 16) - memoria)
+                  .toString(16)
+                  .toUpperCase();
+            });
+          } else {
+            let none = new Program();
+            none.pid = "";
+            none.memoria = memoria;
+            none.dir_base = exe[index].dir_base;
+            index === exe.length - 1 ? exe.pop() : (exe[index] = none);
+            for (let x = 1; x < exe.length; x++) {
+              if (!exe[x - 1].nombre && !exe[x].nombre) {
+                exe[x - 1].memoria += exe[x].memoria;
+                exe.splice(x, 1);
+                x--;
+              }
             }
+            if (!exe[exe.length - 1].nombre) exe.pop();
+            console.log(exe);
           }
-          if (!exe[exe.length - 1].nombre) exe.pop();
-          console.log(exe);
+          drawProc();
+          drawRam();
+          drawMem();
         }
-        drawProc();
-        drawRam();
-        drawMem();
       }
     });
   },
