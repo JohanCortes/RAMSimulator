@@ -10,7 +10,26 @@
 </head>
 
 <body>
-    <section class="main">
+    <form id="inicio">
+        <div>
+            <input type="radio" name="com" id="cc" value="1" required>
+            <label for="cc">Con compactación</label><br>
+            <input type="radio" name="com" id="sc" value="0" required>
+            <label for="sc">Sin compactación</label>
+        </div>
+        <div>
+            <input type="radio" name="caso" id="pc" value="0">
+            <label for="pc">Primer caso</label><br>
+            <input type="radio" name="caso" id="mc" value="1">
+            <label for="mc">Mejor caso</label><br>
+            <input type="radio" name="caso" id="pec" value="2">
+            <label for="pec">Peor caso</label>
+        </div>
+        <section>
+            <input type="submit" value="Comenzar">
+        </section>
+    </form>
+    <section class="main none">
         <div class="icons"></div>
         <section>
             <div class="ram"></div>
@@ -21,7 +40,7 @@
             </div>
         </section>
     </section>
-    <div class="proc"></div>
+    <div class="proc none"></div>
     <script src="js/index.js"></script>
 </body>
 

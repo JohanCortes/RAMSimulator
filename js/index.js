@@ -325,9 +325,8 @@ let drawProc = () => {
   drawStats = ($sel) => {
     let $prog = $d.querySelector(".prog");
     $prog.innerHTML = "<span><b>Detalles de programa</b></span>";
-    for (const key in $sel.dataset) {
+    for (const key in $sel.dataset)
       $prog.innerHTML += `<span>${key}: ${$sel.dataset[key]}</span>`;
-    }
   },
   drawMem = () => {
     let $mem = $d.querySelector(".mem"),
@@ -355,23 +354,32 @@ let drawProc = () => {
         <div><div style="width: ${prc}%;background-color: rgb(${red},${green},0);"></div></div>
         <span>${prc}%</span>
       </div>`;
-  };
-
-(() => {
-  lanzar(programas.SO);
-  for (let p in programas) {
-    if (programas[p][0] !== "S.O.") {
-      fig = `<figure>
+  },
+  inicio = () => {
+    lanzar(programas.SO);
+    for (let p in programas) {
+      if (programas[p][0] !== "S.O.") {
+        fig = `<figure>
     <img src="${programas[p][4]}" alt=" ">
     <figcaption><span>${programas[p][0]}</span></figcaption>
   </figure>`;
-      $d.querySelector(".icons").innerHTML += fig;
+        $d.querySelector(".icons").innerHTML += fig;
+      }
     }
-  }
-  drawProc();
-  drawRam();
-  drawSO();
-  drawStats($d.querySelector(".ram article"));
-  drawMem();
-  events();
-})();
+    drawProc();
+    drawRam();
+    drawSO();
+    drawStats($d.querySelector(".ram article"));
+    drawMem();
+    events();
+    $d.querySelector(".main").classList.remove("none");
+    $d.querySelector(".proc").classList.remove("none");
+  };
+$d.getElementById("inicio").addEventListener("submit", (e) => {
+  e.preventDefault();
+  com = parseInt(e.target.com.value);
+  caso = parseInt(e.target.caso.value) | 0;
+  console.log(com, caso);
+  e.target.style.display = "none";
+  inicio();
+});
