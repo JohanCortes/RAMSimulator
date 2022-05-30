@@ -7,7 +7,7 @@ let $d = document,
     ];
   },
   com = false,
-  caso = 2;
+  caso = 1;
 
 class Program {
   constructor(pid, nombre, t_codigo, t_data, t_bss, dir_base) {
@@ -128,15 +128,18 @@ const kernel = 1048576,
           }
           break;
         case 1: //mejor caso
+          let libre = disp;
           exe.forEach((e) => {
-            if (e.nombre && e.memoria > disp) disp = e.memoria;
+            if (!e.nombre && e.memoria > disp) disp = e.memoria;
           });
           exe.forEach((e, i) => {
+            console.log(e.nombre, e.memoria, cap, disp);
             if (!e.nombre && e.memoria >= cap && e.memoria <= disp) {
               disp = e.memoria;
               index = i;
             }
           });
+          if (libre < disp) index = null;
           break;
         case 2: //peor caso
           exe.forEach((e, i) => {
@@ -151,9 +154,9 @@ const kernel = 1048576,
       programa.resize();
       if (index) {
         programa.dir_base = exe[index].dir_base;
-        exe[index].dir_base = (
-          parseInt(exe[index].dir_base, 16) + cap
-        ).toString(16).toUpperCase();
+        exe[index].dir_base = (parseInt(exe[index].dir_base, 16) + cap)
+          .toString(16)
+          .toUpperCase();
         exe[index].memoria -= cap;
         exe[index].memoria === 0
           ? exe.splice(index, 1, programa)
@@ -208,9 +211,9 @@ let drawProc = () => {
       let $article = $d.createElement("article"),
         $span = $d.createElement("span");
       $span.textContent = e.nombre;
-      $article.dataset.pid = e.pid;
-      $article.dataset.dir = e.dir_base;
-      $article.dataset.memoria = e.memoria;
+      $article.dataset.Proceso = e.pid;
+      $article.dataset.Direccion = e.dir_base;
+      $article.dataset.Memoria = e.memoria;
       $article.appendChild($span);
       if (!e.nombre) col[0] = col[1] = "#ddd";
       $article.setAttribute(
@@ -223,11 +226,17 @@ let drawProc = () => {
       let $article = $d.createElement("article");
       $article.classList.add("libre");
       $article.setAttribute("style", `flex-grow: ${libre}`);
+      $article.dataset.Proceso = "";
+      $article.dataset.Direccion = (
+        parseInt(exe[exe.length - 1].dir_base, 16) + exe[exe.length - 1].memoria
+      )
+        .toString(16)
+        .toUpperCase();
+      $article.dataset.Memoria = libre;
       $ram.appendChild($article);
     })();
   },
   events = () => {
-    let $ram = $d.querySelector(".ram");
     $d.querySelectorAll(".icons figure").forEach((e) => {
       e.addEventListener("click", (fig) => {
         Array(...e.parentElement.children).forEach((f) => {
@@ -256,6 +265,7 @@ let drawProc = () => {
           lanzar(programa);
           drawProc();
           drawRam();
+          drawMem();
           console.log(exe);
         } else {
           alert("No hay memoria suficiente");
@@ -263,6 +273,12 @@ let drawProc = () => {
       });
     });
 
+    let $ram = $d.querySelector(".ram");
+    $ram.addEventListener("click", (e) => {
+      let $article = e.target;
+      while (!$article.matches("article")) $article = $article.parentNode;
+      drawStats($article);
+    });
     $ram.addEventListener("dblclick", (e) => {
       let segs = Array(...$d.querySelector(".ram").children),
         $article = e.target;
@@ -280,6 +296,7 @@ let drawProc = () => {
           });
         } else {
           let none = new Program();
+          none.pid = "";
           none.memoria = memoria;
           none.dir_base = exe[index].dir_base;
           index === exe.length - 1 ? exe.pop() : (exe[index] = none);
@@ -296,8 +313,49 @@ let drawProc = () => {
         }
         drawProc();
         drawRam();
+        drawMem();
       }
     });
+  },
+  drawSO = () => {
+    let $so = $d.querySelector(".so");
+    $so.innerHTML += `<span>Stack: ${stack}</span>
+      <span>Heap: ${heap}</span>
+      <span>Encabezado: ${encabezado}</span>`;
+  },
+  drawStats = ($sel) => {
+    let $prog = $d.querySelector(".prog");
+    $prog.innerHTML = "<span><b>Detalles de programa</b></span>";
+    for (const key in $sel.dataset) {
+      $prog.innerHTML += `<span>${key}: ${$sel.dataset[key]}</span>`;
+    }
+  },
+  drawMem = () => {
+    let $mem = $d.querySelector(".mem"),
+      usada = 0;
+    exe.forEach((e) => {
+      if (e.nombre) usada += e.memoria;
+    });
+    let prc = Math.round((usada / 16777215) * 100),
+      red = 0;
+    green = 0;
+    if (prc > 50) {
+      red = 255;
+      green = 255 - (prc - 50) * 5.1;
+    }
+    if (prc < 50) {
+      green = 255;
+      red = prc * 5.1;
+    }
+    if (prc == 50) green = red = 255;
+
+    $mem.innerHTML = `<span><b>Memoria</b></span>
+      <span>Ocupada: ${usada}</span>
+      <span>Libre: ${16777215 - usada}</span>
+      <div class="prc">
+        <div><div style="width: ${prc}%;background-color: rgb(${red},${green},0);"></div></div>
+        <span>${prc}%</span>
+      </div>`;
   };
 
 (() => {
@@ -313,5 +371,8 @@ let drawProc = () => {
   }
   drawProc();
   drawRam();
+  drawSO();
+  drawStats($d.querySelector(".ram article"));
+  drawMem();
   events();
 })();

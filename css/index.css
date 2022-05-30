@@ -17,12 +17,20 @@ html {
   align-items: center;
 }
 
+.main > section {
+  width: fit-content;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
 .ram {
   display: inline-flex;
   flex-direction: column-reverse;
   align-items: center;
   justify-content: center;
   border: 1px solid #000;
+  margin-right: 3rem;
   width: fit-content;
   height: 95vh;
 }
@@ -38,9 +46,53 @@ html {
 
 .ram > article > span {
   color: white;
-  font: 1.1em Georgia, "Bitstream Charter", "URW Bookman L",
+  font: 1.2em Georgia, "Bitstream Charter", "URW Bookman L",
     "Century Schoolbook L", serif;
   font-weight: bold;
+}
+
+.stats {
+  font: 1.1em Georgia, "Bitstream Charter", "URW Bookman L",
+    "Century Schoolbook L", serif;
+  display: inline-flex;
+  flex-direction: column;
+  border: 1px solid #444;
+  margin-left: 3rem;
+  width: 250px;
+  height: 95vh;
+}
+
+.so {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  border: 1px solid #00f;
+  flex-grow: 2;
+  width: inherit;
+  height: max-content;
+}
+
+.prog {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  border: 1px solid #0f0;
+  flex-grow: 4;
+  width: inherit;
+  height: max-content;
+}
+
+.mem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  border: 1px solid #f00;
+  flex-grow: 4;
+  width: inherit;
+  height: max-content;
 }
 
 .proc {
@@ -66,7 +118,29 @@ html {
   font: 1.03em Lucida Sans Unicode;
 }
 
-.icons{
+.prc {
+  width: 100%;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.prc > div {
+  width: 80%;
+  height: 2rem;
+  display: inline-block;
+  border: #444 3px solid;
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.prc > div > div {
+  height: inherit;
+  margin: 0;
+  background-color: rgb(255, 187, 0)
+}
+
+.icons {
   height: 85vh;
   width: fit-content;
   display: inline-grid;
@@ -74,19 +148,19 @@ html {
   grid-auto-flow: column;
 }
 
-.icons>figure{
-  margin-left: .2rem;
-  margin-top: .4rem;
+.icons > figure {
+  margin-left: 0.2rem;
+  margin-top: 0.4rem;
   padding: 1rem 1rem 0 1rem;
   border-radius: 6px;
 }
 
-.icons>figure>img{
+.icons > figure > img {
   height: 10vh;
   width: auto;
 }
 
-.icons>figure>figcaption{
+.icons > figure > figcaption {
   display: flex;
   align-items: center;
   width: 10vh;
@@ -97,13 +171,13 @@ html {
   text-shadow: -1px 1px 1.5px black, 1px -1px 1.5px black, 0 0 5px black;
 }
 
-.icons>figure:hover{
+.icons > figure:hover {
   border: #99f dotted 1px;
-  background-color: rgba(180, 230, 255, .5);
+  background-color: rgba(180, 230, 255, 0.5);
 }
 
-.figclick{
-  background-color: rgba(180, 230, 255, .8);
+.figclick {
+  background-color: rgba(180, 230, 255, 0.8);
   border: #55e dotted 1px;
   border-radius: 6px;
 }
