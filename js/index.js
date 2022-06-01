@@ -266,6 +266,7 @@ let drawProc = () => {
           drawRam();
           drawMem();
         } else {
+          console.log(programa);
           alert("No hay memoria suficiente");
         }
       });
@@ -355,17 +356,22 @@ let drawProc = () => {
         <span>${prc}%</span>
       </div>`;
   },
-  inicio = () => {
-    lanzar(programas.SO);
+  drawIcons = () => {
+    let $icons = $d.querySelector(".icons");
+    $icons.innerHTML = "";
     for (let p in programas) {
       if (programas[p][0] !== "S.O.") {
         fig = `<figure>
     <img src="${programas[p][4]}" alt=" ">
     <figcaption><span>${programas[p][0]}</span></figcaption>
   </figure>`;
-        $d.querySelector(".icons").innerHTML += fig;
+        $icons.innerHTML += fig;
       }
     }
+  },
+  inicio = () => {
+    lanzar(programas.SO);
+    drawIcons();
     drawProc();
     drawRam();
     drawSO();
@@ -375,6 +381,7 @@ let drawProc = () => {
     $d.querySelector(".main").classList.remove("none");
     $d.querySelector(".proc").classList.remove("none");
   };
+
 $d.getElementById("inicio").addEventListener("submit", (e) => {
   e.preventDefault();
   com = parseInt(e.target.com.value);
@@ -382,4 +389,19 @@ $d.getElementById("inicio").addEventListener("submit", (e) => {
   console.log(com, caso);
   e.target.style.display = "none";
   inicio();
+});
+
+$d.getElementById("nuevo").addEventListener("submit", (e) => {
+  let $n = e.target;
+  e.preventDefault();
+  programas[$n.nombre.value] = [
+    $n.nombre.value,
+    parseInt($n.codigo.value),
+    parseInt($n.datos.value),
+    parseInt($n.bss.value),
+    $n.icon.value,
+  ];
+  $n.reset();
+  drawIcons();
+  events();
 });

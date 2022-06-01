@@ -41,6 +41,22 @@
         </section>
     </section>
     <div class="proc none"></div>
+    <form id="nuevo">
+        <h2>Nuevo Programa</h2>
+        <div>
+            <label for="nombre">Nombre:</label>
+            <input type="text" name="nombre" id="nombre" maxlength="30" required>
+            <label for="codigo">Tamaño de codigo:</label>
+            <input type="number" name="codigo" id="codigo" min="0" required>
+            <label for="datos">Tamaño de datos:</label>
+            <input type="number" name="datos" id="datos" min="0" required>
+            <label for="bss">Tamaño de bss:</label>
+            <input type="number" name="bss" id="bss" min="0" required>
+            <label for="icon">Icono:</label>
+            <input type="url" name="icon" id="icon">
+        </div>
+        <input type="submit" value="Crear">
+    </form>
     <script src="js/index.js"></script>
 </body>
 
