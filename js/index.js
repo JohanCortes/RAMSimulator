@@ -244,6 +244,15 @@ let drawProc = () => {
         let $figure = fig.target;
         while (!$figure.matches("figure")) $figure = $figure.parentNode;
         $figure.classList.add("figclick");
+        let programa = programas[$figure.children[1].children[0].textContent];
+        console.log({
+          Nombre: programa[0],
+          "Tamaño codigo": programa[1],
+          "Datos inicializados": programa[2],
+          "Datos sin inicializar": programa[3],
+          Memoria:
+            encabezado + stack + heap + programa[1] + programa[2] + programa[3],
+        });
       });
       e.addEventListener("dblclick", (fig) => {
         let $figure = fig.target,
